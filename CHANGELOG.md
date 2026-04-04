@@ -2,6 +2,18 @@
 
 All notable changes to Argus are documented here.
 
+## [0.5.4](https://github.com/Meru143/argus/compare/argus-ai-v0.5.3...argus-ai-v0.5.4) - 2026-04-04
+
+### Other
+
+- fix argus doc command and font lint
+- Update docs/styles.css
+- Update docs/index.html
+- Update docs/index.html
+- Update docs/index.html
+- Update docs/styles.css
+- add custom landing page
+
 ## [0.5.3](https://github.com/Meru143/argus/compare/argus-ai-v0.5.2...argus-ai-v0.5.3) - 2026-03-26
 
 ### Other
