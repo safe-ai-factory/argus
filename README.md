@@ -8,7 +8,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/Meru143/argus)](https://github.com/Meru143/argus)
 
-Argus is a local-first, modular AI code review platform. One binary, nine tools, zero lock-in. It combines structural analysis, semantic search, git history intelligence, and LLM-powered reviews to catch what your copilot misses.
+Argus is a local-first AI code review platform for teams that want an independent reviewer, not a model grading its own output. It combines structural analysis, semantic search, git history intelligence, and LLM-powered review so comments are grounded in the full codebase instead of just the patch.
+
+The short version is simple: your coding agent should not grade its own homework.
+
+```bash
+git diff HEAD~1 | npx argus-ai review --repo .
+```
+
+Live page: [merup.me/argus](https://merup.me/argus/)
 
 ## Why Argus?
 
