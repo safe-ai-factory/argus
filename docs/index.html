@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Argus | AI code review that understands your codebase</title>
+    <meta
+      name="description"
+      content="Argus is a local-first AI code review platform that combines structural analysis, semantic search, git history, and independent LLM reviews."
+    />
+    <meta
+      property="og:title"
+      content="Argus | AI code review that understands your codebase"
+    />
+    <meta
+      property="og:description"
+      content="Your coding agent shouldn't grade its own homework. Review code with full-repo context, provider choice, and local-first workflows."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://merup.me/argus/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="site-header">
+        <a class="brand" href="https://github.com/Meru143/argus">Argus</a>
+        <nav class="nav">
+          <a href="#why">Why</a>
+          <a href="#surface">Surface</a>
+          <a href="#install">Install</a>
+          <a href="https://github.com/Meru143/argus">GitHub</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="copy-card">
+            <p class="eyebrow">Local-first AI review for serious codebases</p>
+            <h1>AI code review that actually understands your codebase.</h1>
+            <p class="lede">
+              Argus gives you an independent reviewer with structural maps, semantic
+              search, git history, and diff-aware analysis, so the model reviewing the
+              code is not the same one that just wrote it.
+            </p>
+            <div class="actions">
+              <a class="button primary" href="https://github.com/Meru143/argus">
+                Star on GitHub
+              </a>
+              <a class="button secondary" href="#install">Install 0.5.2</a>
+            </div>
+            <div class="pills">
+              <span>local-first</span>
+              <span>OpenAI / Anthropic / Gemini</span>
+              <span>one binary</span>
+              <span>CLI + MCP</span>
+              <span>independent review</span>
+            </div>
+          </div>
+
+          <aside class="terminal-card">
+            <div class="terminal-top">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <pre><code>$ git diff HEAD~1 | argus-ai review --repo .
+
+review surface:
+  repomap      loaded
+  semantic     indexed
+  git history  loaded
+  diff lens    loaded
+
+finding: hidden regression risk
+reason: changed auth boundary without matching tests
+confidence: high
+
+recommendation:
+  add a test around token refresh and retry ordering
+</code></pre>
+          </aside>
+        </section>
+
+        <section id="why" class="section">
+          <div class="section-head">
+            <p class="eyebrow">Why Argus</p>
+            <h2>Your coding agent should not grade its own homework.</h2>
+            <p>
+              Most AI review workflows reuse the same shallow context that produced the
+              patch. Argus takes the opposite stance: review should be independent,
+              repository-aware, and composable enough to fit a real developer workflow.
+            </p>
+          </div>
+
+          <div class="grid">
+            <article class="feature">
+              <h3>Independent by design</h3>
+              <p>
+                The value proposition is simple and memorable: one model writes, a
+                different review surface critiques. That reduces self-confirming output.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>Full-repo context</h3>
+              <p>
+                Structural maps, semantic search, git history, and cross-file analysis
+                keep the review anchored in the actual codebase instead of just the diff.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>Provider choice</h3>
+              <p>
+                Switch between OpenAI, Anthropic, and Gemini without changing the
+                workflow. Gemini free tier keeps the first trial low-friction.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>One binary, nine tools</h3>
+              <p>
+                Repomap, difflens, codelens, gitpulse, review, feedback, describe,
+                doctor, and MCP support can be used together or as Unix-style pieces.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="surface" class="section">
+          <div class="section-head">
+            <p class="eyebrow">Review surface</p>
+            <h2>Move from raw diff review to evidence-backed review.</h2>
+            <p>
+              Argus is strongest when teams want more than a pass or fail. It gives the
+              reviewer evidence about file relationships, history, and likely impact, so
+              review comments can be specific instead of generic style feedback.
+            </p>
+          </div>
+
+          <div class="split">
+            <div class="panel">
+              <h3>What Argus adds</h3>
+              <ul>
+                <li>Repository maps and code navigation context</li>
+                <li>Semantic search to find similar patterns before commenting</li>
+                <li>Git history signals for churn and ownership clues</li>
+                <li>Provider-agnostic review orchestration</li>
+              </ul>
+            </div>
+            <div class="panel accent">
+              <h3>Where it fits</h3>
+              <p>
+                Use it locally before a pull request, in CI as a review gate, or through
+                MCP when you want an IDE or agent workflow to call into the same review
+                engine.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="install" class="section">
+          <div class="section-head">
+            <p class="eyebrow">Install</p>
+            <h2>Start with the package manager you already trust.</h2>
+            <p>
+              Argus is published across Rust and npm surfaces. The fast path is to
+              initialize config once and then pipe a diff into review.
+            </p>
+          </div>
+
+          <div class="install-grid">
+            <article class="install-card">
+              <h3>npm</h3>
+              <pre><code>npx argus-ai init
+export GEMINI_API_KEY=your-key
+git diff HEAD~1 | npx argus-ai review --repo .</code></pre>
+            </article>
+            <article class="install-card">
+              <h3>cargo</h3>
+              <pre><code>cargo install argus-ai
+argus-ai init
+git diff HEAD~1 | argus-ai review --repo .</code></pre>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
