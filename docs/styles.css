@@ -31,7 +31,7 @@ body {
     radial-gradient(circle at top right, rgba(124, 156, 255, 0.18), transparent 30%),
     radial-gradient(circle at left center, rgba(255, 141, 102, 0.12), transparent 28%),
     linear-gradient(180deg, #0a0d12 0%, #0f1520 100%);
-  font-family: "Sora", system-ui, sans-serif;
+  font-family: Sora, system-ui, sans-serif;
 }
 
 body::before {
