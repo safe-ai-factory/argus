@@ -199,6 +199,7 @@ h1 {
 
 .terminal-card {
   align-self: start;
+  height: fit-content;
   padding: 12px;
 }
 
