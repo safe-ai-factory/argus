@@ -99,6 +99,7 @@ pre {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
   gap: 26px;
+  align-items: start;
   padding: 24px 0 44px;
 }
 
@@ -196,6 +197,18 @@ h1 {
   font-size: 0.9rem;
 }
 
+.terminal-card {
+  align-self: start;
+  height: fit-content;
+  padding: 12px;
+}
+
+.terminal-shell {
+  overflow: hidden;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(8, 12, 18, 0.82), rgba(8, 12, 18, 0.98));
+}
+
 .terminal-top {
   display: flex;
   gap: 8px;
@@ -216,7 +229,6 @@ h1 {
   margin: 0;
   padding: 18px 22px 24px;
   color: #edf2ff;
-  background: linear-gradient(180deg, rgba(8, 12, 18, 0.82), rgba(8, 12, 18, 0.98));
   line-height: 1.7;
   overflow-x: auto;
 }
