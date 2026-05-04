@@ -174,7 +174,7 @@ pub fn analyze_ownership(commits: &[CommitInfo]) -> Result<OwnershipSummary, Arg
         }
 
         // Sort authors by commits descending
-        author_contribs.sort_by(|a, b| b.commits.cmp(&a.commits));
+        author_contribs.sort_by_key(|a| std::cmp::Reverse(a.commits));
 
         let dominant_author_ratio = max_commits as f64 / total_commits as f64;
         let bus_factor = author_contribs.iter().filter(|a| a.ratio > 0.10).count() as u32;
@@ -234,7 +234,7 @@ fn compute_project_bus_factor(files: &[FileOwnership]) -> u32 {
 
     // Sort authors by number of files they contribute to (descending)
     let mut sorted_authors: Vec<(String, u32)> = all_authors.into_iter().collect();
-    sorted_authors.sort_by(|a, b| b.1.cmp(&a.1));
+    sorted_authors.sort_by_key(|a| std::cmp::Reverse(a.1));
 
     let total_files = files.len();
     let threshold = total_files / 2;
