@@ -4,6 +4,25 @@ All notable changes to Argus are documented here.
 
 ## Unreleased
 
+## [0.5.6](https://github.com/JuroOravec/argus/compare/argus-ai-v0.5.2...argus-ai-v0.5.6) - 2026-03-22
+
+### Fixed
+
+- fix LLM base URL format
+- *(npm)* download binaries from argus-ai-v* release tags
+- *(ci)* strip binaries, add rust cache, harden packaging
+- *(ci)* trigger release binary build on argus-ai-v* tags
+
+### Other
+
+- bump version to 0.5.6, add musl Linux build targets
+- bump version to 0.5.5
+- comments
+- bump version to 0.5.4 (fork manual release)
+- *(release-plz)* optional registry publish via ARGUS_PUBLISH_TO_REGISTRIES
+- *(release-plz)* run release-pr only; skip crates.io and npm publish
+- release v0.5.3
+
 ### Fixed
 
 - **LLM `base_url` vs API version path (OpenAI-compatible, Anthropic, Gemini)**  
