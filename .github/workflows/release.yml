@@ -6,12 +6,13 @@ permissions:
 on:
   push:
     tags:
-      # release-plz reliably creates per-workspace-crate tags
-      # (argus-core-v*, argus-mcp-v*, argus-review-v*, etc.) on every
-      # release cycle. argus-core is the foundational workspace member
-      # always part of every release; using its tag as the trigger
-      # gives a consistent, unambiguous "release fired" signal.
-      - 'argus-core-v*'
+      # `argus-ai` is the root binary crate (binary name `argus`) and
+      # the user-facing release. `npm/install.js` downloads from
+      # /releases/download/argus-ai-v<version>/, so binaries must
+      # attach to this tag's release. release-plz publishes
+      # argus-ai-v* on every release cycle alongside the per-crate
+      # tags (argus-core-v*, argus-mcp-v*, etc.).
+      - 'argus-ai-v*'
 
 jobs:
   build:
@@ -60,15 +61,16 @@ jobs:
 
       - name: Install cross (musl targets)
         if: matrix.use_cross
-        run: cargo install cross --locked
+        # Pinned for reproducibility — bumps should be deliberate.
+        run: cargo install cross --version 0.2.5 --locked
 
       - name: Build (cross)
         if: matrix.use_cross
-        run: cross build --release --target ${{ matrix.target }}
+        run: cross build --release --locked --target ${{ matrix.target }}
 
       - name: Build (cargo)
         if: ${{ !matrix.use_cross }}
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cargo build --release --locked --target ${{ matrix.target }}
 
       - name: Package (unix)
         if: matrix.os != 'windows-latest'
