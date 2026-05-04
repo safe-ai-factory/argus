@@ -6,14 +6,13 @@ permissions:
 on:
   push:
     tags:
-      - 'argus-ai-v*'
-
-env:
-  CARGO_TERM_COLOR: always
-  # Strip symbols + LTO reduce size (Linux binaries are ~28 MB stripped vs ~35 MB unstripped; varies by target).
-  CARGO_PROFILE_RELEASE_STRIP: symbols
-  CARGO_PROFILE_RELEASE_LTO: true
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+      # release-plz reliably creates per-workspace-crate tags
+      # (`argus-core-v*`, `argus-mcp-v*`, etc.) on every release cycle. The
+      # `argus-ai-v*` tag for the root binary crate is no longer produced
+      # automatically; binary releases broke after v0.5.3 because this
+      # workflow was waiting for that pattern. Triggering on argus-core-v*
+      # restores the binary release flow.
+      - 'argus-core-v*'
 
 jobs:
   build:
@@ -24,11 +23,12 @@ jobs:
             os: ubuntu-latest
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-latest
-          # musl builds: statically linked, no GLIBC dependency — run on any Linux distro
-          # regardless of libc version. Required for the coder containers (Debian Bookworm
-          # ships GLIBC 2.36, but the gnu binaries require 2.39+).
-          # use_cross=true: delegate to `cross`, which uses a pre-built Docker image that
-          # ships the full musl toolchain — no host-side curl/apt acrobatics needed.
+          # musl builds: statically linked, no GLIBC dependency. The
+          # *-unknown-linux-gnu binaries built on modern Ubuntu runners
+          # require GLIBC 2.39+, so they crash on older base images
+          # (Debian Bookworm ships GLIBC 2.36, Alpine uses musl, etc.).
+          # use_cross=true delegates to `cross`, which uses a Docker image
+          # with the full musl toolchain — no host-side apt acrobatics.
           - target: x86_64-unknown-linux-musl
             os: ubuntu-latest
             use_cross: true
@@ -52,12 +52,7 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
-      - name: Cache Rust dependencies
-        uses: Swatinem/rust-cache@v2
-        with:
-          key: ${{ matrix.target }}
-
-      - name: Install cross-compilation tools (aarch64-linux-gnu)
+      - name: Install cross-compilation tools (aarch64-linux)
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
           sudo apt-get update
@@ -79,19 +74,16 @@ jobs:
       - name: Package (unix)
         if: matrix.os != 'windows-latest'
         run: |
-          BINARY=target/${{ matrix.target }}/release/argus
-          if [ ! -f "$BINARY" ]; then
-            echo "Binary not found at $BINARY" && exit 1
-          fi
-          tar czf argus-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release argus
+          cd target/${{ matrix.target }}/release
+          tar czf ../../../argus-${{ matrix.target }}.tar.gz argus
+          cd ../../..
 
       - name: Package (windows)
         if: matrix.os == 'windows-latest'
         run: |
-          if (-not (Test-Path "target/${{ matrix.target }}/release/argus.exe")) {
-            Write-Error "Binary not found"; exit 1
-          }
-          7z a argus-${{ matrix.target }}.zip target/${{ matrix.target }}/release/argus.exe
+          cd target/${{ matrix.target }}/release
+          7z a ../../../argus-${{ matrix.target }}.zip argus.exe
+          cd ../../..
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -99,7 +91,7 @@ jobs:
           name: argus-${{ matrix.target }}
           path: argus-${{ matrix.target }}.*
 
-  upload:
+  release:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -111,7 +103,8 @@ jobs:
           path: artifacts
           merge-multiple: true
 
-      - name: Upload binaries to existing release
-        run: gh release upload ${{ github.ref_name }} artifacts/*
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: artifacts/*
