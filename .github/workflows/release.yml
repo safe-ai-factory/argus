@@ -6,7 +6,12 @@ permissions:
 on:
   push:
     tags:
-      - 'argus-ai-v*'
+      # release-plz reliably creates per-workspace-crate tags
+      # (argus-core-v*, argus-mcp-v*, argus-review-v*, etc.) on every
+      # release cycle. argus-core is the foundational workspace member
+      # always part of every release; using its tag as the trigger
+      # gives a consistent, unambiguous "release fired" signal.
+      - 'argus-core-v*'
 
 jobs:
   build:
