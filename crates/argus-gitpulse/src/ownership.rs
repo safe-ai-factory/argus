@@ -175,7 +175,11 @@ pub fn analyze_ownership(commits: &[CommitInfo]) -> Result<OwnershipSummary, Arg
 
         // Sort authors by commits descending, tie-breaking on email so the
         // output order is deterministic across HashMap iteration runs.
-        author_contribs.sort_by(|a, b| b.commits.cmp(&a.commits).then_with(|| a.email.cmp(&b.email)));
+        author_contribs.sort_by(|a, b| {
+            b.commits
+                .cmp(&a.commits)
+                .then_with(|| a.email.cmp(&b.email))
+        });
 
         let dominant_author_ratio = max_commits as f64 / total_commits as f64;
         let bus_factor = author_contribs.iter().filter(|a| a.ratio > 0.10).count() as u32;
