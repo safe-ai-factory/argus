@@ -89,9 +89,17 @@ pub fn chunk_file(
     };
 
     let mut parser = Parser::new();
-    parser
-        .set_language(&ts_language)
-        .map_err(|e| ArgusError::Parse(format!("failed to set language: {e}")))?;
+    // TODO(tree-sitter-0.25): drop this guard once the runtime is upgraded.
+    // tree-sitter 0.24 caps at ABI 14, but newer grammar crates (e.g.
+    // tree-sitter-swift 0.7+) emit ABI 15 and fail to load. Skip those files
+    // instead of aborting the whole chunker.
+    if let Err(e) = parser.set_language(&ts_language) {
+        eprintln!(
+            "[argus] skipping {}: failed to set language: {e}",
+            path.display()
+        );
+        return Ok(Vec::new());
+    }
 
     let Some(tree) = parser.parse(content, None) else {
         return Ok(Vec::new());

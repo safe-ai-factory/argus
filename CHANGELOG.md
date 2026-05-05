@@ -2,7 +2,19 @@
 
 All notable changes to Argus are documented here.
 
-## Unreleased
+## [0.5.7](https://github.com/safe-ai-factory/argus/compare/argus-ai-v0.5.6...argus-ai-v0.5.7) - 2026-05-06
+
+### Fixed
+
+- repomap/codelens: skip files whose tree-sitter grammar can't be loaded
+  (e.g. `tree-sitter-swift` 0.7+ emits ABI 15, but the bundled
+  `tree-sitter` 0.24 runtime caps at ABI 14). Previously, a single
+  Swift file in the workspace aborted `argus map` and the review
+  pipeline; now those files are logged and skipped while the rest of
+  the repo is parsed normally. TODO marker left in code; tracking
+  upgrade to `tree-sitter` 0.25 (native ABI 15 support).
+
+## [0.5.6](https://github.com/safe-ai-factory/argus/compare/argus-ai-v0.5.5...argus-ai-v0.5.6) - 2026-05-04
 
 ### Fixed
 
